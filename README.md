@@ -9,6 +9,7 @@
 - [operations](#operations)
   - [on local instance](#on-local-instance-1)
 - [cleanup](#cleanup)
+- [references](#references)
 
 A **foreign data wrapper(fdw)** is an extension available in **PostgreSQL** that allows you to access a table or schema in one database from another.
 
@@ -22,6 +23,8 @@ In this repo, we are using the [Kubernetes](https://kubernetes.io/) to deploy th
 - Helm: `v3.9.0`
 
 ## setup
+
+tl;dr: `./scripts/up.sh`
 
 ### namespace
 
@@ -120,9 +123,15 @@ insert into foreign_pg.test_table(id) values (42);
 
 ## cleanup
 
+tl;dr: `./scripts/down.sh`
+
 ```sh
 helm uninstall local-postgresql -n pg-dfw-demo
 helm uninstall foreign-postgresql -n pg-dfw-demo
 kubectl delete pvc --all -n pg-dfw-demo
 kubectl delete namespace pg-dfw-demo
 ```
+
+## references
+
+- [F.35. postgres_fdw](https://www.postgresql.org/docs/current/postgres-fdw.html)
