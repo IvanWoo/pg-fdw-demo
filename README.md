@@ -78,7 +78,10 @@ CREATE SCHEMA foreign_pg;
 import the foreign schema
 
 ```sql
-IMPORT FOREIGN SCHEMA "public" FROM SERVER foreign_pg_svr INTO foreign_pg;
+IMPORT FOREIGN SCHEMA public
+LIMIT TO (test_table, users)
+FROM SERVER foreign_pg_svr
+INTO foreign_pg;
 ```
 
 ## operations
