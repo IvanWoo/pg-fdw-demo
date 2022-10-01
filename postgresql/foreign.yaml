@@ -1,0 +1,26 @@
+global:
+  postgresql:
+    auth:
+      postgresPassword: demo_password
+primary:
+  initdb:
+    user: postgres
+    password: demo_password
+    scripts:
+      seed.sql: |
+        CREATE TABLE test_table (id INT);
+
+        CREATE TABLE IF NOT EXISTS users(
+          id BIGINT GENERATED ALWAYS AS IDENTITY,
+          PRIMARY KEY(id),
+          hash_firstname TEXT NOT NULL,
+          hash_lastname TEXT NOT NULL,
+          gender VARCHAR(6) NOT NULL CHECK (gender IN ('male', 'female'))
+        );
+
+        INSERT INTO users(hash_firstname, hash_lastname, gender)
+        SELECT md5(RANDOM()::TEXT), md5(RANDOM()::TEXT), CASE WHEN RANDOM() < 0.5 THEN 'male' ELSE 'female' END FROM generate_series(1, 10000);
+
+        CREATE USER foreign_user WITH ENCRYPTED PASSWORD 'foreign_user_password';
+        GRANT ALL ON TABLE test_table TO foreign_user;
+        GRANT ALL ON TABLE users TO foreign_user;
